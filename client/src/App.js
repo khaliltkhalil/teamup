@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <div data-theme="wireframe">
+    <div data-theme="cupcake">
       <Navbar />
       <Outlet />
     </div>
