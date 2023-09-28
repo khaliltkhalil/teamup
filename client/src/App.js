@@ -4,7 +4,7 @@ import { Counter } from "./features/counter/Counter";
 
 function App() {
   return (
-    <div>
+    <div data-theme="wireframe">
       <h1 className="text-3xl"> Hello Lets go</h1>
     </div>
   );
