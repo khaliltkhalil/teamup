@@ -11,11 +11,11 @@ export const createUser = createAsyncThunk(
   async (user) => {}
 );
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers(builder) {
     builder
       .addCase(createUser.pending, (state) => {
         state.status = "loading";
@@ -24,7 +24,7 @@ export const userSlice = createSlice({
         state.status = "succeeded";
         state.user = action.payload;
       })
-      .addCase(createUser.failed, (state, action) => {
+      .addCase(createUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
