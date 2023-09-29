@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Alert from "../components/Alert";
 import signupImg from "../resources/signup-page-img.svg";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function SignIn() {
   const formik = useFormik({
@@ -10,6 +11,12 @@ function SignIn() {
       email: "",
       password: "",
     },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .min(6, "Must be longer than 6 characters")
+        .required("Required"),
+    }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -37,8 +44,12 @@ function SignIn() {
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.email}
                   />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="text-red-400">{formik.errors.email}</div>
+                  ) : null}
                 </div>
                 <div className="form-control w-full max-w-xs">
                   <label className="label">
@@ -51,8 +62,12 @@ function SignIn() {
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.password}
                   />
+                  {formik.touched.password && formik.errors.password ? (
+                    <div className="text-red-400">{formik.errors.password}</div>
+                  ) : null}
                 </div>
                 <Alert show={false} type="error" message="alert alert" />
               </section>

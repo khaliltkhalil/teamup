@@ -3,6 +3,7 @@ import signupImg from "../resources/signup-page-img.svg";
 import Alert from "../components/Alert";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function SignUp() {
   const formik = useFormik({
@@ -12,6 +13,18 @@ function SignUp() {
       email: "",
       password: "",
     },
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .max(15, "Must be 15 characters or less")
+        .required("Required"),
+      lastName: Yup.string()
+        .max(20, "Must be 20 characters or less")
+        .required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .min(6, "Must be longer than 6 characters")
+        .required("Required"),
+    }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -40,8 +53,14 @@ function SignUp() {
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.firstName}
                   />
+                  {formik.touched.firstName && formik.errors.firstName ? (
+                    <div className="text-red-400">
+                      {formik.errors.firstName}
+                    </div>
+                  ) : null}
                 </div>
                 <div className="form-control w-full max-w-xs">
                   <label className="label">
@@ -54,8 +73,12 @@ function SignUp() {
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.lastName}
                   />
+                  {formik.touched.lastName && formik.errors.lastName ? (
+                    <div className="text-red-400">{formik.errors.lastName}</div>
+                  ) : null}
                 </div>
                 <div className="form-control w-full max-w-xs">
                   <label className="label">
@@ -68,8 +91,12 @@ function SignUp() {
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.email}
                   />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="text-red-400">{formik.errors.email}</div>
+                  ) : null}
                 </div>
                 <div className="form-control w-full max-w-xs">
                   <label className="label">
@@ -82,8 +109,12 @@ function SignUp() {
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.password}
                   />
+                  {formik.touched.password && formik.errors.password ? (
+                    <div className="text-red-400">{formik.errors.password}</div>
+                  ) : null}
                 </div>
                 <Alert show={false} type="error" message="alert alert" />
               </section>
