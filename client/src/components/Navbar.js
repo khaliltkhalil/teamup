@@ -1,6 +1,28 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 function Navbar() {
+  const homePageLinks = (
+    <>
+      <li>
+        <a>Logout</a>
+      </li>
+      <li>
+        <a>Navbar Item 2</a>
+      </li>
+    </>
+  );
+
+  const navbarContent = (
+    <>
+      <li>
+        <a>Navbar Item 1</a>
+      </li>
+      <li>
+        <a>Navbar Item 2</a>
+      </li>
+    </>
+  );
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -28,17 +50,12 @@ function Navbar() {
           <div className="flex-none hidden lg:block">
             <ul className="menu menu-horizontal">
               {/* Navbar menu content here */}
-              <li>
-                <a>Navbar Item 1</a>
-              </li>
-              <li>
-                <a>Navbar Item 2</a>
-              </li>
+              {navbarContent}
             </ul>
           </div>
         </div>
         {/* Page content here */}
-        Content
+        <Outlet />
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer-3" className="drawer-overlay"></label>

@@ -23,7 +23,6 @@ function App() {
   return (
     <div data-theme="cupcake">
       <Navbar />
-      <Outlet />
     </div>
   );
 }
