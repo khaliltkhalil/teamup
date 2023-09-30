@@ -4,8 +4,11 @@ import Alert from "../components/Alert";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { createUser } from "../features/userSlice";
 
 function SignUp() {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -25,8 +28,9 @@ function SignUp() {
         .min(6, "Must be longer than 6 characters")
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (user) => {
+      alert(JSON.stringify(user, null, 2));
+      dispatch(createUser(user));
     },
   });
 

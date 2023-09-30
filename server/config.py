@@ -6,6 +6,7 @@ from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
 
 
 load_dotenv()
@@ -22,3 +23,4 @@ ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 
 api = Api(app)
+CORS(app)
