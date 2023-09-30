@@ -1,14 +1,16 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation, NavLink } from "react-router-dom";
 import { logoutUser } from "../features/userSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logoutUser());
   };
+
   const homePageLinks = (
     <>
       <li>
@@ -20,7 +22,27 @@ function Navbar() {
     </>
   );
 
-  const navbarContent = homePageLinks;
+  const projectsPageLinks = (
+    <>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <Link to="/projects">Add Project</Link>
+      </li>
+      <li>
+        <a onClick={handleLogout}>Logout</a>
+      </li>
+    </>
+  );
+
+  let navbarContent;
+  if (location.pathname == "/") {
+    navbarContent = homePageLinks;
+  } else if (location.pathname == "/projects") {
+    navbarContent = projectsPageLinks;
+  }
+
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
