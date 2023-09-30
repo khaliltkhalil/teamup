@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import signupImg from "../resources/signup-page-img.svg";
 import Alert from "../components/Alert";
-import { Link } from "react-router-dom";
+import { Link, Navigate, redirect } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { createUser } from "../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser, selectUser } from "../features/userSlice";
 
 function SignUp() {
   const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
+
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -29,13 +32,13 @@ function SignUp() {
         .required("Required"),
     }),
     onSubmit: (user) => {
-      alert(JSON.stringify(user, null, 2));
       dispatch(createUser(user));
     },
   });
 
   return (
     <>
+      {user.id && <Navigate to="/" replace={true} />}
       <main className="flex p-10 ">
         <section className="flex flex-col space-y-10 items-center md:w-1/2 w-full">
           <h1>Logo</h1>
