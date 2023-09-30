@@ -1,11 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import signupImg from "../resources/signup-page-img.svg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, selectUser } from "../features/userSlice";
 
 function SignIn() {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -17,12 +21,13 @@ function SignIn() {
         .min(6, "Must be longer than 6 characters")
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (user) => {
+      dispatch(loginUser(user));
     },
   });
   return (
     <>
+      {user.id && <Navigate to="/" replace={true} />}
       <main className="flex p-10 ">
         <section className="flex flex-col space-y-10 items-center md:w-1/2 w-full">
           <h1>logo</h1>
