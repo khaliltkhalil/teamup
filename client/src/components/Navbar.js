@@ -1,28 +1,26 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Outlet, Link } from "react-router-dom";
+import { logoutUser } from "../features/userSlice";
 
 function Navbar() {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
   const homePageLinks = (
     <>
       <li>
-        <a>Logout</a>
+        <Link to="/projects">Your Projects</Link>
       </li>
       <li>
-        <a>Navbar Item 2</a>
+        <a onClick={handleLogout}>Logout</a>
       </li>
     </>
   );
 
-  const navbarContent = (
-    <>
-      <li>
-        <a>Navbar Item 1</a>
-      </li>
-      <li>
-        <a>Navbar Item 2</a>
-      </li>
-    </>
-  );
+  const navbarContent = homePageLinks;
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -61,12 +59,7 @@ function Navbar() {
         <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
         <ul className="menu p-4 w-80 min-h-full bg-base-200">
           {/* Sidebar content here */}
-          <li>
-            <a>Sidebar Item 1</a>
-          </li>
-          <li>
-            <a>Sidebar Item 2</a>
-          </li>
+          {navbarContent}
         </ul>
       </div>
     </div>

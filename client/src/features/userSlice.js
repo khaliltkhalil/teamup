@@ -25,7 +25,7 @@ export const checkUserSession = createAsyncThunk("user/fetchUser", async () => {
 });
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
-  const response = await axios.get("/api/v1/logout");
+  const response = await axios.delete("/api/v1/logout");
   return response.data;
 });
 
