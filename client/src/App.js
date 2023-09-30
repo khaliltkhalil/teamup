@@ -11,7 +11,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.id) {
+    if (userStatus == "idle" || userStatus == "failed") {
       navigate("/signin");
     }
   }, [userStatus]);

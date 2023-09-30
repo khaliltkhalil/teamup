@@ -8,13 +8,20 @@ const initialState = {
 };
 
 export const createUser = createAsyncThunk("user/fetchUser", async (user) => {
-  user = await axios.post("http://localhost:5555/api/v1/signup", user);
-  return user.data;
+  const response = await axios.post("/api/v1/signup", user);
+  return response.data;
 });
 
 export const loginUser = createAsyncThunk("user/fetchUser", async (user) => {
-  user = await axios.post("http://localhost:5555/api/v1/signin", user);
-  return user.data;
+  const response = await axios.post("/api/v1/signin", user, {
+    withCredentials: true,
+  });
+  return response.data;
+});
+
+export const checkUserSession = createAsyncThunk("user/fetchUser", async () => {
+  const response = await axios.get("/api/v1/check_session");
+  return response.data;
 });
 
 const userSlice = createSlice({

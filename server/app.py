@@ -70,12 +70,26 @@ class Signin(Resource):
             return response
 
         session["user_id"] = user.id
+        print(session["user_id"])
 
         return make_response(user_schema.dump(user), 200)
 
 
 api.add_resource(Signup, "/api/v1/signup", endpoint="signup")
 api.add_resource(Signin, "/api/v1/signin", endpoint="signin")
+
+
+class CheckSession(Resource):
+    def get(self):
+        user_id = session.get("user_id")
+        if not user_id:
+            return make_response({"message": "unauthorized"}, 401)
+        user = User.query.filter(User.id == user_id).first()
+
+        return make_response(user_schema.dump(user), 200)
+
+
+api.add_resource(CheckSession, "/api/v1/check_session", endpoint="check_session")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

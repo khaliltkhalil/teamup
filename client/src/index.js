@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import { checkUserSession } from "./features/userSlice";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -33,6 +34,8 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
 ]);
+
+store.dispatch(checkUserSession());
 
 root.render(
   <React.StrictMode>
