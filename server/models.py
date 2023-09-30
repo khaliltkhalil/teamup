@@ -12,7 +12,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, unique=True)
+    email = db.Column(db.String, unique=True, nullable=False)
     _password_hash = db.Column(db.String)
 
     @validates("first_name")
@@ -42,6 +42,8 @@ class User(db.Model):
 
     @password_hash.setter
     def password_hash(self, password):
+        if not password:
+            raise ValueError("password must be provided")
         if len(password) < 6:
             raise ValueError("password must be longer than 6 characters")
 
