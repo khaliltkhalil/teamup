@@ -75,6 +75,14 @@ class Signin(Resource):
         return make_response(user_schema.dump(user), 200)
 
 
+class Logout(Resource):
+    def delete(self):
+        session["user_id"] = None
+
+        return make_response({"message": "User logged out"}, 200)
+
+
+api.add_resource(Logout, "/api/v1/logout", endpoint="logout")
 api.add_resource(Signup, "/api/v1/signup", endpoint="signup")
 api.add_resource(Signin, "/api/v1/signin", endpoint="signin")
 
