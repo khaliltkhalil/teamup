@@ -11,16 +11,16 @@ function SignUp() {
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      firstName: Yup.string()
+      first_name: Yup.string()
         .max(15, "Must be 15 characters or less")
         .required("Required"),
-      lastName: Yup.string()
+      last_name: Yup.string()
         .max(20, "Must be 20 characters or less")
         .required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
@@ -51,18 +51,18 @@ function SignUp() {
                     <span className="label-text font-bold">First Name:</span>
                   </label>
                   <input
-                    id="firstName"
-                    name="firstName"
+                    id="first_name"
+                    name="first_name"
                     type="text"
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.firstName}
+                    value={formik.values.first_name}
                   />
-                  {formik.touched.firstName && formik.errors.firstName ? (
+                  {formik.touched.first_name && formik.errors.first_name ? (
                     <div className="text-red-400">
-                      {formik.errors.firstName}
+                      {formik.errors.first_name}
                     </div>
                   ) : null}
                 </div>
@@ -71,17 +71,19 @@ function SignUp() {
                     <span className="label-text font-bold">Last Name:</span>
                   </label>
                   <input
-                    id="lastName"
-                    name="lastName"
+                    id="last_name"
+                    name="last_name"
                     type="text"
                     placeholder="Type here"
                     className="input input-bordered w-full max-w-xs"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.lastName}
+                    value={formik.values.last_name}
                   />
-                  {formik.touched.lastName && formik.errors.lastName ? (
-                    <div className="text-red-400">{formik.errors.lastName}</div>
+                  {formik.touched.last_name && formik.errors.last_name ? (
+                    <div className="text-red-400">
+                      {formik.errors.last_name}
+                    </div>
                   ) : null}
                 </div>
                 <div className="form-control w-full max-w-xs">

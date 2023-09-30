@@ -11,6 +11,7 @@ from flask_cors import CORS
 
 load_dotenv()
 app = Flask(__name__)
+CORS(app)
 app.secret_key = b"Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 # os.environ.get("DATABASE_URI")
@@ -23,4 +24,3 @@ ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 
 api = Api(app)
-CORS(app)

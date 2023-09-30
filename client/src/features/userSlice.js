@@ -9,7 +9,16 @@ const initialState = {
 
 export const createUser = createAsyncThunk("user/createUser", async (user) => {
   user = await axios.post("http://localhost:5555/api/v1/signup", user);
-  return user;
+  //   const rawResponse = await fetch("http://localhost:5555/api/v1/signup", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(user),
+  //   });
+  //   const content = await rawResponse.json();
+  return user.data;
 });
 
 const userSlice = createSlice({
