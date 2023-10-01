@@ -1,5 +1,5 @@
 from config import ma
-from models import User
+from models import User, Project
 
 
 class UserSchema(ma.SQLAlchemySchema):
@@ -14,3 +14,19 @@ class UserSchema(ma.SQLAlchemySchema):
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
+
+
+class ProjectSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Project
+
+    id = ma.auto_field()
+    title = ma.auto_field()
+    description = ma.auto_field()
+    status = ma.auto_field()
+    created_At = ma.auto_field()
+    deadline = ma.auto_field()
+
+
+project_schema = ProjectSchema()
+projects_schema = ProjectSchema(many=True)
