@@ -89,3 +89,23 @@ class Project(db.Model):
 
     def __repr__(self):
         return f"Project {self.title} deadline {self.deadline}"
+
+
+class ProjectUserRole(db.Model):
+    __tablename__ = "projects_users_roles"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    project_id = db.Column(db.Integer, db.ForeignKey("barbers.id"))
+    role = db.Column(db.String, nullable=False)
+
+    roleValues = ["manager", "member"]
+
+    @validates("role")
+    def validate_role(self, key, role):
+        if not role or role not in self.roleValues:
+            raise ValueError("role must be manager or member")
+        return role
+
+    def __repr__(self):
+        return f"user {self.user_id} project {self.project_id} role {self.role}"
