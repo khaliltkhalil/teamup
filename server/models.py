@@ -22,7 +22,7 @@ class User(db.Model):
         return first_name
 
     @validates("last_name")
-    def validate_first_name(self, key, last_name):
+    def validate_last_name(self, key, last_name):
         if not last_name:
             raise ValueError("last_name must be provided")
         return last_name
@@ -55,3 +55,37 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User {self.username}, ID: {self.id}"
+
+
+class Project(db.Model):
+    __tablename__ = "projects"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    status = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    deadline = db.Column(db.DateTime)
+
+    @validates("title")
+    def validate_title(self, key, title):
+        if not title:
+            raise ValueError("title must be provided")
+        return title
+
+    statusValues = ["pending", "ongoing", "completed"]
+
+    @validates("status")
+    def validate_status(self, key, status):
+        if not status or status not in self.statusValues:
+            raise ValueError("status must be pending, ongoing, or completed")
+        return status
+
+    @validates("deadline")
+    def validate_deadline(self, key, deadline):
+        if not deadline:
+            raise ValueError("deadline must be provided")
+        return deadline
+
+    def __repr__(self):
+        return f"Project {self.title} deadline {self.deadline}"
