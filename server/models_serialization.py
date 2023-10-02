@@ -24,7 +24,7 @@ class ProjectSchema(ma.SQLAlchemyAutoSchema):
     title = ma.auto_field()
     description = ma.auto_field()
     status = ma.auto_field()
-    created_At = ma.auto_field()
+    created_at = ma.auto_field()
     deadline = ma.auto_field()
 
 

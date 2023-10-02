@@ -13,7 +13,7 @@ class User(db.Model):
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    projects = db.relationship("ProjectUserRole", back_populates="project")
+    # projects = db.relationship("ProjectUserRole", back_populates="project")
 
     _password_hash = db.Column(db.String)
 
@@ -69,7 +69,7 @@ class Project(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     deadline = db.Column(db.DateTime)
 
-    users = db.relationship("ProjectUserRole", back_populates="project")
+    # users = db.relationship("ProjectUserRole", back_populates="project")
 
     @validates("title")
     def validate_title(self, key, title):
@@ -103,8 +103,12 @@ class ProjectUserRole(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id"))
     role = db.Column(db.String, nullable=False)
 
-    project = db.relationship("Project", back_populates="users")
-    user = db.relationship("User", back_populates="projects")
+    project = db.relationship(
+        "Project", backref=db.backref("users_roles", cascade="all, delete-orphan")
+    )
+    user = db.relationship(
+        "User", backref=db.backref("projects_roles", cascade="all, delete-orphan")
+    )
 
     roleValues = ["manager", "member"]
 
