@@ -1,5 +1,5 @@
 from config import ma
-from models import User, Project
+from models import User, Project, ProjectUserRole
 
 
 class UserSchema(ma.SQLAlchemySchema):
@@ -30,3 +30,27 @@ class ProjectSchema(ma.SQLAlchemyAutoSchema):
 
 project_schema = ProjectSchema()
 projects_schema = ProjectSchema(many=True)
+
+
+class ProjectRoleSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = ProjectUserRole
+
+    project = ma.Nested(ProjectSchema)
+    role = ma.auto_field()
+
+
+single_project_role_schema = ProjectRoleSchema()
+plural_project_role_schema = ProjectRoleSchema(many=True)
+
+
+class UserRoleSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = ProjectUserRole
+
+    user = ma.Nested(UserSchema)
+    role = ma.auto_field()
+
+
+single_user_role_schema = UserRoleSchema()
+plural_user_role_schema = UserRoleSchema(many=True)
