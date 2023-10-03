@@ -34,3 +34,8 @@ const projectsSlice = createSlice({
       });
   },
 });
+
+export const selectProjectsStatus = (state) => state.projects.status;
+export const selectProjects = (state) => state.projects.data;
+
+export default projectsSlice.reducer;
