@@ -1,17 +1,28 @@
 #!/usr/bin/env python3
 
 from config import app, db, api
-from models import User
+from models import User, Project
 from flask_restful import Resource
 from flask import request, session, make_response
 from models_serialization import user_schema, users_schema
 from werkzeug.exceptions import NotFound, BadRequest, abort
 from sqlalchemy.exc import IntegrityError
+from models_serialization import plural_project_role_schema
 
 
 @app.route("/api/v1")
 def index():
     return "<h1>teamup api<h1/>"
+
+
+@app.before_request
+def check_session():
+    if (
+        not session.get("user_id")
+        and request.endpoint != "signin"
+        and request.endpoint != "signup"
+    ):
+        return make_response({"message": "Unauthorized"}, 401)
 
 
 @app.errorhandler(NotFound)
@@ -70,7 +81,6 @@ class Signin(Resource):
             return response
 
         session["user_id"] = user.id
-        print(session["user_id"])
 
         return make_response(user_schema.dump(user), 200)
 
@@ -99,5 +109,15 @@ class CheckSession(Resource):
 
 api.add_resource(CheckSession, "/api/v1/check_session", endpoint="check_session")
 
+
+class ProjectsByUser(Resource):
+    def get(self):
+        user_id = session["user_id"]
+        user = User.query.filter(User.id == user_id).first()
+        projects_roles = plural_project_role_schema.dump(user.projects_roles)
+        return make_response(projects_roles, 200)
+
+
+api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
