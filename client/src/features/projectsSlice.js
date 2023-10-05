@@ -15,7 +15,7 @@ export const fetchProjects = createAsyncThunk(
   }
 );
 
-export const addProjects = createAsyncThunk(
+export const addProject = createAsyncThunk(
   "projects/addProjects",
   async (projectData) => {
     const response = await axios.post("/api/v1/projects", projectData);
@@ -40,14 +40,14 @@ const projectsSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(addProjects.pending, (state) => {
+      .addCase(addProject.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(addProjects.fulfilled, (state, action) => {
+      .addCase(addProject.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data.push(action.payload);
       })
-      .addCase(addProjects.rejected, (state, action) => {
+      .addCase(addProject.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

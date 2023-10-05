@@ -1,9 +1,13 @@
 import React from "react";
-import { useFormik, Field } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import Alert from "../components/Alert";
+import { useDispatch } from "react-redux";
+import { addProject } from "../features/projectsSlice";
 
 function AddProject() {
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -17,7 +21,7 @@ function AddProject() {
     }),
     onSubmit: (projectData) => {
       console.log(projectData);
-      //   dispatch(createUser(user));
+      dispatch(addProject(projectData));
     },
   });
   return (
