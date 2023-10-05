@@ -29,9 +29,9 @@ function Projects() {
   } else if (projectsStatus == "succeeded") {
     console.log(projects);
     content = (
-      <div className="flex gap-5 p-5">
+      <div className="flex flex-wrap gap-5 p-5">
         {projects.map((project) => (
-          <ProjectCard />
+          <ProjectCard key={project.id} {...project} />
         ))}
       </div>
     );
