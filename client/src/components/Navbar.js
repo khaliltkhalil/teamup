@@ -28,7 +28,7 @@ function Navbar() {
         <NavLink to="/">Home</NavLink>
       </li>
       <li>
-        <Link to="/projects">Add Project</Link>
+        <Link to="/projects/addProject">Add Project</Link>
       </li>
       <li>
         <a onClick={handleLogout}>Logout</a>
@@ -39,7 +39,10 @@ function Navbar() {
   let navbarContent;
   if (location.pathname == "/") {
     navbarContent = homePageLinks;
-  } else if (location.pathname == "/projects") {
+  } else if (
+    location.pathname == "/projects" ||
+    location.pathname == "/projects/addProject"
+  ) {
     navbarContent = projectsPageLinks;
   }
 

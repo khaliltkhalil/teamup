@@ -10,6 +10,7 @@ import Projects from "./pages/Projects";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { checkUserSession } from "./features/userSlice";
+import AddProject from "./pages/AddProject";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/projects",
         element: <Projects />,
+      },
+      {
+        path: "/projects/addProject",
+        element: <AddProject />,
       },
     ],
   },

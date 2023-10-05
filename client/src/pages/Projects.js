@@ -27,7 +27,6 @@ function Projects() {
   } else if (projectsStatus == "failed") {
     content = <h1>Something went wrong ... :(</h1>;
   } else if (projectsStatus == "succeeded") {
-    console.log(projects);
     content = (
       <div className="flex flex-wrap gap-5 p-5">
         {projects.map((project) => (
