@@ -6,6 +6,7 @@ import {
 } from "../features/projectsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { createImmutableStateInvariantMiddleware } from "@reduxjs/toolkit";
+import ProjectCard from "../components/ProjectCard";
 
 function Projects() {
   const projectsStatus = useSelector(selectProjectsStatus);
@@ -13,6 +14,7 @@ function Projects() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // only fetch projects when the app start
     if (projectsStatus == "idle") {
       dispatch(fetchProjects());
     }
@@ -25,7 +27,14 @@ function Projects() {
   } else if (projectsStatus == "failed") {
     content = <h1>Something went wrong ... :(</h1>;
   } else if (projectsStatus == "succeeded") {
-    content = <div>Projects</div>;
+    console.log(projects);
+    content = (
+      <div className="flex gap-5 p-5">
+        {projects.map((project) => (
+          <ProjectCard />
+        ))}
+      </div>
+    );
   }
 
   return <main className="h-screen">{content}</main>;
