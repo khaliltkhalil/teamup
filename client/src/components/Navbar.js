@@ -1,12 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Outlet, Link, useLocation, NavLink } from "react-router-dom";
+import {
+  Outlet,
+  Link,
+  useLocation,
+  NavLink,
+  matchPath,
+} from "react-router-dom";
 import { logoutUser } from "../features/userSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
   const location = useLocation();
-
   const handleLogout = () => {
     dispatch(logoutUser());
   };
@@ -15,9 +20,6 @@ function Navbar() {
     <>
       <li>
         <Link to="/projects">Your Projects</Link>
-      </li>
-      <li>
-        <a onClick={handleLogout}>Logout</a>
       </li>
     </>
   );
@@ -30,8 +32,19 @@ function Navbar() {
       <li>
         <Link to="/projects/addProject">Add Project</Link>
       </li>
+    </>
+  );
+
+  const singleProjectLinks = (
+    <>
       <li>
-        <a onClick={handleLogout}>Logout</a>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <Link to="/projects/projects">Your Project</Link>
+      </li>
+      <li>
+        <Link to="/projects/projects/:id/members">Project Members</Link>
       </li>
     </>
   );
@@ -44,8 +57,9 @@ function Navbar() {
     location.pathname == "/projects/addProject"
   ) {
     navbarContent = projectsPageLinks;
+  } else if (matchPath({ path: "/projects/:projectId" }, location.pathname)) {
+    navbarContent = singleProjectLinks;
   }
-
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -74,6 +88,9 @@ function Navbar() {
             <ul className="menu menu-horizontal">
               {/* Navbar menu content here */}
               {navbarContent}
+              <li>
+                <a onClick={handleLogout}>Logout</a>
+              </li>
             </ul>
           </div>
         </div>

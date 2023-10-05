@@ -11,6 +11,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { checkUserSession } from "./features/userSlice";
 import AddProject from "./pages/AddProject";
+import SingleProject from "./pages/SingleProject";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
       {
         path: "/projects/addProject",
         element: <AddProject />,
+      },
+      {
+        path: "/projects/:projectId",
+        element: <SingleProject />,
+        id: "singleProject",
       },
     ],
   },
