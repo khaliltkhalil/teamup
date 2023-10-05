@@ -15,7 +15,8 @@ function AddProject() {
       description: Yup.string().required("Required"),
       deadline: Yup.string().required("Required"),
     }),
-    onSubmit: (user) => {
+    onSubmit: (projectData) => {
+      console.log(projectData);
       //   dispatch(createUser(user));
     },
   });
