@@ -19,14 +19,12 @@ function Projects() {
   }, []);
 
   let content;
-  console.log(projectsStatus);
 
   if (projectsStatus == "loading") {
     content = <h1>Loading....</h1>;
   } else if (projectsStatus == "failed") {
     content = <h1>Something went wrong ... :(</h1>;
   } else if (projectsStatus == "succeeded") {
-    console.log(projects);
     content = <div>Projects</div>;
   }
 

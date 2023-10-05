@@ -8,6 +8,7 @@ from models_serialization import user_schema, users_schema
 from werkzeug.exceptions import NotFound, BadRequest, abort
 from sqlalchemy.exc import IntegrityError
 from models_serialization import plural_project_role_schema
+from helper import combine_project_role
 
 
 @app.route("/api/v1")
@@ -115,7 +116,8 @@ class ProjectsByUser(Resource):
         user_id = session["user_id"]
         user = User.query.filter(User.id == user_id).first()
         projects_roles = plural_project_role_schema.dump(user.projects_roles)
-        return make_response(projects_roles, 200)
+        projects = combine_project_role(projects_roles)
+        return make_response(projects, 200)
 
 
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
