@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
 from config import app, db, api
-from models import User, Project
+from models import User, Project, ProjectUserRole
 from flask_restful import Resource
 from flask import request, session, make_response
-from models_serialization import user_schema, users_schema
+from models_serialization import user_schema, users_schema, project_schema
 from werkzeug.exceptions import NotFound, BadRequest, abort
 from sqlalchemy.exc import IntegrityError
 from models_serialization import plural_project_role_schema
 from helper import combine_project_role
+from datetime import datetime
 
 
 @app.route("/api/v1")
@@ -45,6 +46,13 @@ def handle_integrity_error(e):
 
 
 @app.errorhandler(ValueError)
+def handle_value_error(e):
+    response = make_response({"message": str(e)}, 400)
+
+    return response
+
+
+@app.errorhandler(TypeError)
 def handle_value_error(e):
     response = make_response({"message": str(e)}, 400)
 
@@ -119,7 +127,28 @@ class ProjectsByUser(Resource):
         projects = combine_project_role(projects_roles)
         return make_response(projects, 200)
 
+    def post(self):
+        user_id = session["user_id"]
+        json = request.get_json()
+        project = Project(
+            title=json.get("title"),
+            description=json.get("description"),
+            status="pending",
+            deadline=datetime.strptime(json.get("deadline"), "%Y-%m-%d"),
+        )
+
+        db.session.add(project)
+        db.session.commit()
+        project_user_role = ProjectUserRole(
+            user_id=user_id, project_id=project.id, role="manager"
+        )
+        db.session.add(project_user_role)
+        db.session.commit()
+
+        return make_response(project_schema.dump(project), 201)
+
 
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
+
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
