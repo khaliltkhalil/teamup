@@ -8,6 +8,7 @@ import {
   selectMembersStatus,
 } from "../features/membersSlice";
 import UserCard from "../components/UserCard";
+import SearchBar from "../components/SearchBar";
 
 function Members() {
   const { projectId } = useParams();
@@ -29,12 +30,14 @@ function Members() {
     content = members.map((member) => <UserCard key={member.id} {...member} />);
   }
   return (
-    <main className="h-screen m-5">
-      <section className="flex flex-col">
+    <main className="h-screen m-5 flex">
+      <section className="flex flex-col gap-3 w-1/2">
         <h1>Members:</h1>
         {content}
       </section>
-      <section></section>
+      <section>
+        <SearchBar />
+      </section>
     </main>
   );
 }
