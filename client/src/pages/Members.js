@@ -7,6 +7,7 @@ import {
   selectMembers,
   selectMembersStatus,
 } from "../features/membersSlice";
+import UserCard from "../components/UserCard";
 
 function Members() {
   const { projectId } = useParams();
@@ -25,11 +26,17 @@ function Members() {
   } else if (membersStatus == "failed") {
     content = <div>Something went wrong</div>;
   } else if (membersStatus == "succeeded") {
-    content = members.map((member) => (
-      <div key={member.id}> {member.first_name}</div>
-    ));
+    content = members.map((member) => <UserCard key={member.id} {...member} />);
   }
-  return <main className="h-screen">{content}</main>;
+  return (
+    <main className="h-screen m-5">
+      <section className="flex flex-col">
+        <h1>Members:</h1>
+        {content}
+      </section>
+      <section></section>
+    </main>
+  );
 }
 
 export default Members;
