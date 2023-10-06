@@ -120,3 +120,46 @@ class ProjectUserRole(db.Model):
 
     def __repr__(self):
         return f"user {self.user_id} project {self.project_id} role {self.role}"
+
+
+class Task(db.Model):
+    __tablename__ = "tasks"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    status = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    deadline = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    project_id = db.Column(db.Integer, db.ForeignKey("projects.id"))
+
+    project = db.relationship(
+        "Project", backref=db.backref("tasks", cascade="all, delete-orphan")
+    )
+    user = db.relationship(
+        "User", backref=db.backref("tasks", cascade="all, delete-orphan")
+    )
+
+    @validates("title")
+    def validate_title(self, key, title):
+        if not title:
+            raise ValueError("title must be provided")
+        return title
+
+    statusValues = ["pending", "ongoing", "completed"]
+
+    @validates("status")
+    def validate_status(self, key, status):
+        if not status or status not in self.statusValues:
+            raise ValueError("status must be pending, ongoing, or completed")
+        return status
+
+    @validates("deadline")
+    def validate_deadline(self, key, deadline):
+        if not deadline:
+            raise ValueError("deadline must be provided")
+        return deadline
+
+    def __repr__(self):
+        return f"task {self.title}"

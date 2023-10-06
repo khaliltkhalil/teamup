@@ -9,6 +9,7 @@ import {
 } from "../features/membersSlice";
 import UserCard from "../components/UserCard";
 import SearchBar from "../components/SearchBar";
+import { selectProjectById } from "../features/projectsSlice";
 
 function Members() {
   const { projectId } = useParams();
@@ -16,6 +17,7 @@ function Members() {
   const membersStatus = useSelector(selectMembersStatus);
   const currentProjectId = useSelector(selectCurrentProjectId);
   const members = useSelector(selectMembers);
+  const project = useSelector((state) => selectProjectById(state, projectId));
   useEffect(() => {
     if (currentProjectId != projectId) {
       dispatch(fetchMembers(projectId));
@@ -35,10 +37,12 @@ function Members() {
         <h1>Members:</h1>
         {content}
       </section>
-      <section>
-        <h1>Add Members to Project</h1>
-        <SearchBar projectId={projectId} />
-      </section>
+      {project.role === "manager" && (
+        <section>
+          <h1>Add Members to Project</h1>
+          <SearchBar projectId={projectId} />
+        </section>
+      )}
     </main>
   );
 }
