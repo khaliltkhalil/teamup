@@ -7,6 +7,7 @@ from flask import request, session, make_response
 from models_serialization import user_schema, users_schema, project_schema
 from werkzeug.exceptions import NotFound, BadRequest, Forbidden, abort
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 from models_serialization import plural_project_role_schema, plural_user_role_schema
 from helper import combine_project_role, combine_user_role
 from datetime import datetime
@@ -154,26 +155,38 @@ class ProjectsByUser(Resource):
         return make_response(project_schema.dump(project), 201)
 
 
-class UsersByProjectId(Resource):
+class Users(Resource):
     def get(self):
         user_id = session["user_id"]
         project_id = request.args.get("project_id")
+        name = request.args.get("name")
+        limit = request.args.get("limit")
 
-        if not project_id:
-            abort(400, "project_id must be provided as query string")
+        if project_id:
+            project_user_role = ProjectUserRole.query.filter(
+                ProjectUserRole.user_id == user_id,
+                ProjectUserRole.project_id == project_id,
+            ).all()
 
-        project_user_role = ProjectUserRole.query.filter(
-            ProjectUserRole.user_id == user_id, ProjectUserRole.project_id == project_id
-        ).all()
+            if not project_user_role:
+                abort(403, "Can't access this project")
 
-        if not project_user_role:
-            abort(403, "Can't access this project")
+            users = combine_user_role(plural_user_role_schema.dump(project_user_role))
+            return make_response(users, 200)
 
-        users = combine_user_role(plural_user_role_schema.dump(project_user_role))
-        return make_response(users, 200)
+        elif name:
+            users = User.query.filter(
+                or_(User.first_name.startswith(name), User.last_name.startswith(name))
+            ).limit(limit or 10)
+            return make_response(users_schema.dump(users), 200)
+
+        # no name and limit has been provided
+        abort(400, "name must be provided as query string")
 
 
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
-api.add_resource(UsersByProjectId, "/api/v1/users", endpoint="users_by_project_id")
+api.add_resource(Users, "/api/v1/users", endpoint="users")
+
+
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
