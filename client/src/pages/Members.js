@@ -22,11 +22,11 @@ function Members() {
     }
   }, []);
   let content;
-  if (membersStatus == "loading") {
+  if (membersStatus === "loading") {
     content = <div>Loading...</div>;
-  } else if (membersStatus == "failed") {
+  } else if (membersStatus === "failed") {
     content = <div>Something went wrong</div>;
-  } else if (membersStatus == "succeeded") {
+  } else if (membersStatus === "succeeded") {
     content = members.map((member) => <UserCard key={member.id} {...member} />);
   }
   return (
