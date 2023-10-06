@@ -14,8 +14,11 @@ export const fetchMembers = createAsyncThunk(
   async (projectId, { getState, dispatch }) => {
     // get all users that are in this projectId
     const response = await axios.get(`/api/v1/users?project_id=${projectId}`);
-    dispatch(setCurrentProjectId(projectId));
-    return response.data;
+    const members = await response.data;
+    return {
+      data: members,
+      currentProjectId: projectId,
+    };
   }
 );
 
@@ -42,7 +45,8 @@ const membersSlice = createSlice({
       })
       .addCase(fetchMembers.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload;
+        state.data = action.payload.data;
+        state.currentProjectId = action.payload.currentProjectId;
       })
       .addCase(fetchMembers.rejected, (state, action) => {
         state.status = "failed";

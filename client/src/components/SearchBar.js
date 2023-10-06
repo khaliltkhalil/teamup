@@ -1,8 +1,9 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import Turnstone from "turnstone";
 
 function SearchBar() {
+  const [selectedUser, setSelectedUser] = useState({});
   const styles = {
     input:
       "w-full h-12 border border-oldsilver-300 py-2 pl-10 pr-7 text-xl outline-none rounded",
@@ -27,31 +28,49 @@ function SearchBar() {
 
   const listbox = [
     {
-      id: "cities",
+      id: "users",
       displayField: "name",
       data: async (query) => {
-        const res = await axios.get(`/api/v1/users?nameStartWith=${query}`);
+        const res = await axios.get(
+          `/api/v1/users?nameStartWith=${query}&limit=${maxItems}`
+        );
         const users = await res.json();
         return users;
       },
       searchType: "startswith",
     },
   ];
+
+  const onItemSelected = (selectedItem, displayField) => {
+    setSelectedUser(selectedItem);
+  };
+  const Item = ({ first_name, last_name, email }) => {
+    return (
+      <div>
+        {first_name} {last_name} ({email})
+      </div>
+    );
+  };
   return (
-    <Turnstone
-      cancelButton={true}
-      debounceWait={250}
-      id="search"
-      listbox={listbox}
-      listboxIsImmutable={true}
-      matchText={true}
-      maxItems={maxItems}
-      name="search"
-      noItemsMessage="We found no places that match your search"
-      placeholder="Enter user name"
-      styles={styles}
-      typeahead={true}
-    />
+    <div className="flex gap-3">
+      <Turnstone
+        cancelButton={true}
+        debounceWait={250}
+        id="search"
+        listbox={listbox}
+        listboxIsImmutable={true}
+        matchText={true}
+        maxItems={maxItems}
+        name="search"
+        noItemsMessage="We found no places that match your search"
+        placeholder="Enter user name"
+        styles={styles}
+        typeahead={true}
+        Item={Item}
+        onSelect={onItemSelected}
+      />
+      <button>Add</button>
+    </div>
   );
 }
 
