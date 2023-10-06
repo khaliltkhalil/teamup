@@ -1,6 +1,6 @@
 from random import choice as rc
 from faker import Faker
-from models import User, Project, ProjectUserRole
+from models import User, Project, ProjectUserRole, Task
 from datetime import datetime
 from config import db, app
 
@@ -46,8 +46,23 @@ def add_projects_for_user(user_id):
         db.session.commit()
 
 
+def add_tasks_for_user_project(user_id, project_id):
+    for _ in range(10):
+        task = Task(
+            title=fake.sentence(),
+            description=fake.paragraph(nb_sentences=3),
+            status="pending",
+            deadline=datetime(2023, 12, 1),
+            project_id=project_id,
+            user_id=user_id,
+        )
+        db.session.add(task)
+        db.session.commit()
+
+
 if __name__ == "__main__":
     with app.app_context():
         clear_db()
         create_users()
         add_projects_for_user(1)
+        add_tasks_for_user_project(1, 1)
