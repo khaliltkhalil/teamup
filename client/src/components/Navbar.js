@@ -6,12 +6,14 @@ import {
   useLocation,
   NavLink,
   matchPath,
+  useParams,
 } from "react-router-dom";
 import { logoutUser } from "../features/userSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { projectId } = useParams();
   const handleLogout = () => {
     dispatch(logoutUser());
   };
@@ -41,10 +43,21 @@ function Navbar() {
         <NavLink to="/">Home</NavLink>
       </li>
       <li>
-        <Link to="/projects/projects">Your Project</Link>
+        <Link to="/projects">Your Project</Link>
       </li>
       <li>
-        <Link to="/projects/projects/:id/members">Project Members</Link>
+        <Link to={`/projects/${projectId}/members`}>Project Members</Link>
+      </li>
+    </>
+  );
+
+  const membersPageLinks = (
+    <>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <Link to={`/projects/${projectId}`}>Project</Link>
       </li>
     </>
   );
@@ -59,6 +72,10 @@ function Navbar() {
     navbarContent = projectsPageLinks;
   } else if (matchPath({ path: "/projects/:projectId" }, location.pathname)) {
     navbarContent = singleProjectLinks;
+  } else if (
+    matchPath({ path: "/projects/:projectId/members" }, location.pathname)
+  ) {
+    navbarContent = membersPageLinks;
   }
   return (
     <div className="drawer">
@@ -102,6 +119,9 @@ function Navbar() {
         <ul className="menu p-4 w-80 min-h-full bg-base-200">
           {/* Sidebar content here */}
           {navbarContent}
+          <li>
+            <a onClick={handleLogout}>Logout</a>
+          </li>
         </ul>
       </div>
     </div>

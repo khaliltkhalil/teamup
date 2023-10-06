@@ -12,6 +12,7 @@ import SignUp from "./pages/SignUp";
 import { checkUserSession } from "./features/userSlice";
 import AddProject from "./pages/AddProject";
 import SingleProject from "./pages/SingleProject";
+import Members from "./pages/Members";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
         path: "/projects/:projectId",
         element: <SingleProject />,
         id: "singleProject",
+      },
+      {
+        path: "/projects/:projectId/members",
+        element: <Members />,
       },
     ],
   },

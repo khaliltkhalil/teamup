@@ -5,10 +5,10 @@ from models import User, Project, ProjectUserRole
 from flask_restful import Resource
 from flask import request, session, make_response
 from models_serialization import user_schema, users_schema, project_schema
-from werkzeug.exceptions import NotFound, BadRequest, abort
+from werkzeug.exceptions import NotFound, BadRequest, Forbidden, abort
 from sqlalchemy.exc import IntegrityError
-from models_serialization import plural_project_role_schema
-from helper import combine_project_role
+from models_serialization import plural_project_role_schema, plural_user_role_schema
+from helper import combine_project_role, combine_user_role
 from datetime import datetime
 
 
@@ -35,6 +35,12 @@ def handle_not_found(e):
 
 
 @app.errorhandler(BadRequest)
+def handle_bad_request(e):
+    response = make_response({"message": str(e)}, 400)
+    return response
+
+
+@app.errorhandler(Forbidden)
 def handle_bad_request(e):
     response = make_response({"message": str(e)}, 400)
     return response
@@ -148,7 +154,26 @@ class ProjectsByUser(Resource):
         return make_response(project_schema.dump(project), 201)
 
 
-api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
+class UsersByProjectId(Resource):
+    def get(self):
+        user_id = session["user_id"]
+        project_id = request.args.get("project_id")
 
+        if not project_id:
+            abort(400, "project_id must be provided as query string")
+
+        project_user_role = ProjectUserRole.query.filter(
+            ProjectUserRole.user_id == user_id, ProjectUserRole.project_id == project_id
+        ).all()
+
+        if not project_user_role:
+            abort(403, "Can't access this project")
+
+        users = combine_user_role(plural_user_role_schema.dump(project_user_role))
+        return make_response(users, 200)
+
+
+api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
+api.add_resource(UsersByProjectId, "/api/v1/users", endpoint="users_by_project_id")
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
