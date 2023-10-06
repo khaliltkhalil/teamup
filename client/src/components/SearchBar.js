@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Turnstone from "turnstone";
 
 function SearchBar() {
   const [selectedUser, setSelectedUser] = useState({});
+  const dispatch = useDispatch();
   const styles = {
     input:
       "w-full h-12 border border-oldsilver-300 py-2 pl-10 pr-7 text-xl outline-none rounded",
@@ -29,25 +31,27 @@ function SearchBar() {
   const listbox = [
     {
       id: "users",
-      displayField: "name",
+      displayField: "email",
       data: async (query) => {
         const res = await axios.get(
-          `/api/v1/users?nameStartWith=${query}&limit=${maxItems}`
+          `/api/v1/users?email=${query}&limit=${maxItems}`
         );
-        const users = await res.json();
-        return users;
+
+        return res.data;
       },
       searchType: "startswith",
     },
   ];
 
+  const handleAddUSer = () => {};
+
   const onItemSelected = (selectedItem, displayField) => {
     setSelectedUser(selectedItem);
   };
-  const Item = ({ first_name, last_name, email }) => {
+  const Item = ({ item }) => {
     return (
       <div>
-        {first_name} {last_name} ({email})
+        {item.first_name} {item.last_name} ({item.email})
       </div>
     );
   };
@@ -55,6 +59,7 @@ function SearchBar() {
     <div className="flex gap-3">
       <Turnstone
         cancelButton={true}
+        clearButton={true}
         debounceWait={250}
         id="search"
         listbox={listbox}
@@ -62,14 +67,16 @@ function SearchBar() {
         matchText={true}
         maxItems={maxItems}
         name="search"
-        noItemsMessage="We found no places that match your search"
-        placeholder="Enter user name"
+        noItemsMessage="We found no user that match your search"
+        placeholder="Search user by email"
         styles={styles}
         typeahead={true}
         Item={Item}
         onSelect={onItemSelected}
       />
-      <button>Add</button>
+      <button onClick={handleAddUSer} className="btn btn-primary">
+        Add
+      </button>
     </div>
   );
 }

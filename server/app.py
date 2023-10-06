@@ -159,7 +159,7 @@ class Users(Resource):
     def get(self):
         user_id = session["user_id"]
         project_id = request.args.get("project_id")
-        name = request.args.get("name")
+        email = request.args.get("email")
         limit = request.args.get("limit")
 
         if project_id:
@@ -171,17 +171,33 @@ class Users(Resource):
             if not project_user_role:
                 abort(403, "Can't access this project")
 
-            users = combine_user_role(plural_user_role_schema.dump(project_user_role))
+            users_roles = ProjectUserRole.query.filter(
+                ProjectUserRole.project_id == project_id,
+            ).all()
+            users = combine_user_role(plural_user_role_schema.dump(users_roles))
             return make_response(users, 200)
 
-        elif name:
-            users = User.query.filter(
-                or_(User.first_name.startswith(name), User.last_name.startswith(name))
-            ).limit(limit or 10)
+        elif email:
+            users = User.query.filter(User.email.contains(email)).limit(limit or 10)
             return make_response(users_schema.dump(users), 200)
 
-        # no name and limit has been provided
+        # no name  has been provided
         abort(400, "name must be provided as query string")
+
+
+class UsersProjectsRoles(Resource):
+    def post(self):
+        user_id = session["user_id"]
+        # check role for this user_id
+        project_user_role = ProjectUserRole.query.filter(
+            ProjectUserRole.user_id == user_id,
+            ProjectUserRole.project_id == json.project_id,
+        ).first()
+
+        if not project_user_role or project_user_role.role != "manager":
+            abort(403, "Can't add members to this project")
+        new_user_project_role = ProjectUserRole()
+        json = request.json()
 
 
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
