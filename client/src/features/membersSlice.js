@@ -22,13 +22,16 @@ export const fetchMembers = createAsyncThunk(
   }
 );
 
-// export const addMember = createAsyncThunk(
-//   "projects/addMember",
-//   async (userId) => {
-//     const response = await axios.post("/api/v1/projects", projectData);
-//     return response.data;
-//   }
-// );
+export const addMember = createAsyncThunk(
+  "projects/addMember",
+  async (userProjectData) => {
+    const response = await axios.post(
+      "/api/v1/projects_users_roles",
+      userProjectData
+    );
+    return response.data;
+  }
+);
 
 const membersSlice = createSlice({
   name: "members",
@@ -51,15 +54,15 @@ const membersSlice = createSlice({
       .addCase(fetchMembers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      //   .addCase(addMember.pending, (state) => {
+      //     state.status = "loading";
+      //   })
+      .addCase(addMember.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data.push(action.payload);
       });
-    //   .addCase(addProject.pending, (state) => {
-    //     state.status = "loading";
-    //   })
-    //   .addCase(addProject.fulfilled, (state, action) => {
-    //     state.status = "succeeded";
-    //     state.data.push(action.payload);
-    //   })
-    //   .addCase(addProject.rejected, (state, action) => {
+    //   .addCase(addMember.rejected, (state, action) => {
     //     state.status = "failed";
     //     state.error = action.error.message;
     //   });

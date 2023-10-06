@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Turnstone from "turnstone";
+import { addMember } from "../features/membersSlice";
 
-function SearchBar() {
+function SearchBar({ projectId }) {
   const [selectedUser, setSelectedUser] = useState({});
   const dispatch = useDispatch();
+
   const styles = {
     input:
       "w-full h-12 border border-oldsilver-300 py-2 pl-10 pr-7 text-xl outline-none rounded",
@@ -43,7 +45,15 @@ function SearchBar() {
     },
   ];
 
-  const handleAddUSer = () => {};
+  const handleAddUSer = () => {
+    dispatch(
+      addMember({
+        user_id: selectedUser.id,
+        project_id: projectId,
+        role: "member",
+      })
+    );
+  };
 
   const onItemSelected = (selectedItem, displayField) => {
     setSelectedUser(selectedItem);

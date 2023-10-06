@@ -36,7 +36,8 @@ function Members() {
         {content}
       </section>
       <section>
-        <SearchBar />
+        <h1>Add Members to Project</h1>
+        <SearchBar projectId={projectId} />
       </section>
     </main>
   );
