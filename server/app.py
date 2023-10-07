@@ -284,12 +284,35 @@ class Tasks(Resource):
         return make_response(task_schema.dump(task), 201)
 
 
+class TaskById(Resource):
+    def patch(self, id):
+        user_id = session["user_id"]
+        json = request.get_json()
+
+        task = Task.query.filter(Task.id == id).first()
+
+        if not task:
+            abort(400, "task doesn't exist")
+
+        # check if the requesting user is the owner of this task
+        if task.user.id != user_id:
+            abort(403, "Unauthorized, can't modify this task")
+
+        for attr in json:
+            setattr(task, attr, json[attr])
+
+        db.session.commit()
+
+        return make_response(task_schema.dump(task), 200)
+
+
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
 api.add_resource(Users, "/api/v1/users", endpoint="users")
 api.add_resource(
     ProjectsUsersRoles, "/api/v1/projects_users_roles", endpoint="projects_users_roles"
 )
 api.add_resource(Tasks, "/api/v1/tasks", endpoint="get_tasks")
+api.add_resource(TaskById, "/api/v1/tasks/<int:id>", endpoint="task_by_id")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
