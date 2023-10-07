@@ -30,6 +30,16 @@ export const addTask = createAsyncThunk(
   }
 );
 
+export const editTask = createAsyncThunk(
+  "projects/editTask",
+  async (taskData) => {
+    const response = await axios.patch(`/api/v1/tasks/${taskData.id}`, {
+      ...taskData,
+    });
+    return response.data;
+  }
+);
+
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
@@ -58,8 +68,24 @@ const tasksSlice = createSlice({
       .addCase(addTask.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data.push(action.payload);
+      })
+      //   .addCase(addMember.rejected, (state, action) => {
+      //     state.status = "failed";
+      //     state.error = action.error.message;
+      //   });
+      //   .addCase(editTask.pending, (state) => {
+      //     state.status = "loading";
+      //   })
+      .addCase(editTask.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = state.data.map((task) => {
+          if (action.payload.id === task.id) {
+            return action.payload;
+          }
+          return task;
+        });
       });
-    //   .addCase(addMember.rejected, (state, action) => {
+    //   .addCase(editTask.rejected, (state, action) => {
     //     state.status = "failed";
     //     state.error = action.error.message;
     //   });

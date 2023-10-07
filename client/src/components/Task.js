@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import UserCard from "./UserCard";
 import { useDispatch } from "react-redux";
+import { editTask } from "../features/tasksSlice";
 
 function Task({ id, title, user, status, currentUser }) {
   const [selectedStatus, setSelectedStatus] = useState(status);
+  console.log(status);
   const dispatch = useDispatch();
-  const onOptionChange = (e) => {};
+  const onOptionChange = (e) => {
+    dispatch(
+      editTask({
+        id,
+        status: e.target.value,
+      })
+    );
+    setSelectedStatus(e.target.value);
+  };
   return (
     <div className="card w-3/4 flex flex-row gap-4 bg-base-200 shadow-xl p-5">
       <section className="w-1/4">
@@ -21,7 +31,8 @@ function Task({ id, title, user, status, currentUser }) {
               <input
                 type="radio"
                 id={`pending-${id}`}
-                name="pending"
+                name="status"
+                value="pending"
                 className="radio radio-primary"
                 checked={selectedStatus === "pending"}
                 onChange={onOptionChange}
@@ -32,7 +43,8 @@ function Task({ id, title, user, status, currentUser }) {
               <input
                 type="radio"
                 id={`ongoing-${id}`}
-                name="ongoing"
+                name="status"
+                value="ongoing"
                 className="radio radio-primary"
                 checked={selectedStatus === "ongoing"}
                 onChange={onOptionChange}
@@ -42,8 +54,9 @@ function Task({ id, title, user, status, currentUser }) {
               <label htmlFor={`completed-${id}`}>Completed</label>
               <input
                 type="radio"
-                name="completed"
+                name="status"
                 id={`completed-${id}`}
+                value="completed"
                 className="radio radio-primary"
                 checked={selectedStatus === "completed"}
                 onChange={onOptionChange}

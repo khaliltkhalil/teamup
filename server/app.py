@@ -300,7 +300,7 @@ class TaskById(Resource):
 
         for attr in json:
             setattr(task, attr, json[attr])
-
+        db.session.add(task)
         db.session.commit()
 
         return make_response(task_schema.dump(task), 200)
