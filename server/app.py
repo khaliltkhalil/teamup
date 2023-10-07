@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from config import app, db, api
-from models import User, Project, ProjectUserRole
+from models import User, Project, ProjectUserRole, Task
 from flask_restful import Resource
 from flask import request, session, make_response
-from models_serialization import user_schema, users_schema, project_schema
+from models_serialization import user_schema, users_schema, project_schema, tasks_schema
 from werkzeug.exceptions import NotFound, BadRequest, Forbidden, abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
@@ -229,11 +229,31 @@ class ProjectsUsersRoles(Resource):
         return make_response(user, 201)
 
 
+class Tasks(Resource):
+    def get(self):
+        user_id = session["user_id"]
+        project_id = request.args.get("project_id")
+
+        # check role for this user_id, project_id
+        project_user_role = ProjectUserRole.query.filter(
+            ProjectUserRole.user_id == user_id,
+            ProjectUserRole.project_id == project_id,
+        ).first()
+
+        if not project_user_role:
+            abort(403, "Can't access this project")
+
+        tasks = Task.query.filter(Task.project_id == project_id).all()
+
+        return make_response(tasks_schema.dump(tasks), 200)
+
+
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
 api.add_resource(Users, "/api/v1/users", endpoint="users")
 api.add_resource(
     ProjectsUsersRoles, "/api/v1/projects_users_roles", endpoint="projects_users_roles"
 )
+api.add_resource(Tasks, "/api/v1/tasks", endpoint="get_tasks")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

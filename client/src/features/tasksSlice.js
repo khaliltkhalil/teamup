@@ -14,9 +14,9 @@ export const fetchTasks = createAsyncThunk(
   async (projectId) => {
     // get all users that are in this projectId
     const response = await axios.get(`/api/v1/tasks?project_id=${projectId}`);
-    const members = await response.data;
+    const tasks = await response.data;
     return {
-      data: Tasks,
+      data: tasks,
       currentProjectId: projectId,
     };
   }

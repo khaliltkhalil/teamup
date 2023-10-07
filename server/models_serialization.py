@@ -1,5 +1,5 @@
 from config import ma
-from models import User, Project, ProjectUserRole
+from models import User, Project, ProjectUserRole, Task
 
 
 class UserSchema(ma.SQLAlchemySchema):
@@ -54,3 +54,20 @@ class UserRoleSchema(ma.SQLAlchemyAutoSchema):
 
 single_user_role_schema = UserRoleSchema()
 plural_user_role_schema = UserRoleSchema(many=True)
+
+
+class TaskSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Task
+
+    id = ma.auto_field()
+    title = ma.auto_field()
+    description = ma.auto_field()
+    status = ma.auto_field()
+    deadline = ma.auto_field()
+
+    user = ma.Nested(UserSchema)
+
+
+task_schema = TaskSchema()
+tasks_schema = TaskSchema(many=True)
