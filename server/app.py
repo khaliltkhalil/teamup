@@ -4,7 +4,13 @@ from config import app, db, api
 from models import User, Project, ProjectUserRole, Task
 from flask_restful import Resource
 from flask import request, session, make_response
-from models_serialization import user_schema, users_schema, project_schema, tasks_schema
+from models_serialization import (
+    user_schema,
+    users_schema,
+    project_schema,
+    tasks_schema,
+    task_schema,
+)
 from werkzeug.exceptions import NotFound, BadRequest, Forbidden, abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
@@ -246,6 +252,36 @@ class Tasks(Resource):
         tasks = Task.query.filter(Task.project_id == project_id).all()
 
         return make_response(tasks_schema.dump(tasks), 200)
+
+    def post(self):
+        user_id = session["user_id"]
+        json = request.get_json()
+        member_user_id = json.get("user_id")
+        project_id = json.get("project_id")
+        title = json.get("title")
+        deadline = json.get("deadline")
+        if not title or not member_user_id or not title or not deadline:
+            abort(400, "missing info")
+
+        # check role for this user_id
+        project_user_role = ProjectUserRole.query.filter(
+            ProjectUserRole.user_id == user_id,
+            ProjectUserRole.project_id == project_id,
+        ).first()
+
+        if not project_user_role or project_user_role.role != "manager":
+            abort(403, "Can't add task to this project")
+
+        task = Task(
+            title=title,
+            status="pending",
+            deadline=datetime.strptime(json.get("deadline"), "%Y-%m-%d"),
+            user_id=member_user_id,
+            project_id=project_id,
+        )
+        db.session.add(task)
+        db.session.commit()
+        return make_response(task_schema.dump(task), 201)
 
 
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
