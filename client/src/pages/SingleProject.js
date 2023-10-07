@@ -22,8 +22,11 @@ function SingleProject() {
   });
 
   return (
-    <main className="h-screen m-5">
-      <section id="project-info" className="flex flex-col w-1/2 gap-5 m-auto">
+    <main className="h-screen flex flex-col gap-5 m-5">
+      <section
+        id="project-info"
+        className="flex flex-col w-1/2 gap-5 ml-auto mr-auto"
+      >
         <p className="card-title">{project.title}</p>
         <p>{project.description}</p>
         <p>Deadline: {new Date(project.deadline).toDateString()}</p>
@@ -34,10 +37,12 @@ function SingleProject() {
           </div>
         )}
       </section>
-
-      <section>
-        <AddTaskBar members={members} projectId={projectId} />
-      </section>
+      {project.role === "manager" && (
+        <section>
+          <h2>Add Task</h2>
+          <AddTaskBar members={members} projectId={projectId} />
+        </section>
+      )}
     </main>
   );
 }
