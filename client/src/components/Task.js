@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { editTask } from "../features/tasksSlice";
 import { AiFillDelete } from "react-icons/ai";
 
-function Task({ id, title, user, status, currentUser }) {
+function Task({ id, title, user, status, currentUser, projectRole }) {
   const [selectedStatus, setSelectedStatus] = useState(status);
   const dispatch = useDispatch();
   const onOptionChange = (e) => {
@@ -15,6 +15,10 @@ function Task({ id, title, user, status, currentUser }) {
       })
     );
     setSelectedStatus(e.target.value);
+  };
+
+  const handleDelete = (e) => {
+    console.log(id);
   };
   return (
     <div className="card w-3/4 flex flex-row gap-4 bg-base-200 shadow-xl p-5">
@@ -27,7 +31,9 @@ function Task({ id, title, user, status, currentUser }) {
         <form>
           <div className="flex flex-col gap-2">
             <div className="flex flex-row gap-2">
-              <label htmlFor={`pending-${id}`}>Pending</label>
+              <label className="cursor-pointer " htmlFor={`pending-${id}`}>
+                Pending
+              </label>
               <input
                 disabled={currentUser.id === user.id ? false : true}
                 type="radio"
@@ -40,7 +46,10 @@ function Task({ id, title, user, status, currentUser }) {
               />
             </div>
             <div className="flex flex-row gap-2">
-              <label htmlFor={`ongoing-${id}`}> Ongoing</label>
+              <label className="cursor-pointer " htmlFor={`ongoing-${id}`}>
+                {" "}
+                Ongoing
+              </label>
               <input
                 disabled={currentUser.id === user.id ? false : true}
                 type="radio"
@@ -53,7 +62,9 @@ function Task({ id, title, user, status, currentUser }) {
               />
             </div>
             <div className="flex flex-row gap-2">
-              <label htmlFor={`completed-${id}`}>Completed</label>
+              <label className="cursor-pointer " htmlFor={`completed-${id}`}>
+                Completed
+              </label>
               <input
                 disabled={currentUser.id === user.id ? false : true}
                 type="radio"
@@ -68,9 +79,15 @@ function Task({ id, title, user, status, currentUser }) {
           </div>
         </form>
       </section>
-      <section className="flex w-1/4 justify-end ">
-        <AiFillDelete size={30} />
-      </section>
+      {projectRole == "manager" && (
+        <section className="flex w-1/4 justify-end ">
+          <AiFillDelete
+            className="cursor-pointer "
+            onClick={handleDelete}
+            size={30}
+          />
+        </section>
+      )}
     </div>
   );
 }

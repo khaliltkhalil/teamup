@@ -9,7 +9,6 @@ import {
   fetchMembers,
 } from "../features/membersSlice";
 import TasksBar from "../components/TasksBar";
-import { selectUser } from "../features/userSlice";
 
 function SingleProject() {
   const { projectId } = useParams();
@@ -17,7 +16,7 @@ function SingleProject() {
   const project = useSelector((state) => selectProjectById(state, projectId));
   const currentProjectId = useSelector(selectCurrentProjectId);
   const members = useSelector(selectMembers);
-  const user = useSelector(selectUser);
+
   useEffect(() => {
     if (currentProjectId != projectId) {
       dispatch(fetchMembers(projectId));
@@ -46,7 +45,7 @@ function SingleProject() {
           <AddTaskBar members={members} projectId={projectId} />
         </section>
       )}
-      <TasksBar projectId={projectId} />
+      <TasksBar projectId={projectId} projectRole={project.role} />
     </main>
   );
 }

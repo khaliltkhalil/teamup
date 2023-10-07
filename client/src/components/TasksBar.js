@@ -9,7 +9,7 @@ import {
 import Task from "./Task";
 import { selectUser } from "../features/userSlice";
 
-function TasksBar({ projectId }) {
+function TasksBar({ projectId, projectRole }) {
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
   const tasksStatus = useSelector(selectTasksStatus);
@@ -27,7 +27,12 @@ function TasksBar({ projectId }) {
     content = <div>Something went wrong</div>;
   } else if (tasksStatus === "succeeded") {
     content = tasks.map((task) => (
-      <Task key={task.id} {...task} currentUser={currentUser} />
+      <Task
+        key={task.id}
+        {...task}
+        currentUser={currentUser}
+        projectRole={projectRole}
+      />
     ));
   }
   return (
