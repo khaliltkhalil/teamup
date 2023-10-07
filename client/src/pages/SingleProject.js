@@ -8,6 +8,8 @@ import {
   selectMembers,
   fetchMembers,
 } from "../features/membersSlice";
+import TasksBar from "../components/TasksBar";
+import { selectUser } from "../features/userSlice";
 
 function SingleProject() {
   const { projectId } = useParams();
@@ -15,6 +17,7 @@ function SingleProject() {
   const project = useSelector((state) => selectProjectById(state, projectId));
   const currentProjectId = useSelector(selectCurrentProjectId);
   const members = useSelector(selectMembers);
+  const user = useSelector(selectUser);
   useEffect(() => {
     if (currentProjectId != projectId) {
       dispatch(fetchMembers(projectId));
@@ -22,7 +25,7 @@ function SingleProject() {
   });
 
   return (
-    <main className="h-screen flex flex-col gap-5 m-5">
+    <main className="h-fit flex flex-col gap-12 m-5">
       <section
         id="project-info"
         className="flex flex-col w-1/2 gap-5 ml-auto mr-auto"
@@ -43,6 +46,7 @@ function SingleProject() {
           <AddTaskBar members={members} projectId={projectId} />
         </section>
       )}
+      <TasksBar projectId={projectId} />
     </main>
   );
 }
