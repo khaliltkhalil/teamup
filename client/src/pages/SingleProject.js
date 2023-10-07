@@ -1,11 +1,26 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { selectProjectById } from "../features/projectsSlice";
+import AddTaskBar from "../components/AddTaskBar";
+import {
+  selectCurrentProjectId,
+  selectMembers,
+  fetchMembers,
+} from "../features/membersSlice";
 
 function SingleProject() {
   const { projectId } = useParams();
+  const dispatch = useDispatch();
   const project = useSelector((state) => selectProjectById(state, projectId));
+  const currentProjectId = useSelector(selectCurrentProjectId);
+  const members = useSelector(selectMembers);
+  useEffect(() => {
+    if (currentProjectId != projectId) {
+      dispatch(fetchMembers(projectId));
+    }
+  });
+
   return (
     <main className="h-screen m-5">
       <section id="project-info" className="flex flex-col w-1/2 gap-5 m-auto">
@@ -19,7 +34,10 @@ function SingleProject() {
           </div>
         )}
       </section>
-      <section></section>
+
+      <section>
+        <AddTaskBar members={members} projectId={projectId} />
+      </section>
     </main>
   );
 }
