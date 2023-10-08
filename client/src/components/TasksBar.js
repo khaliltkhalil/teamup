@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchTasks,
@@ -15,6 +15,7 @@ function TasksBar({ projectId, projectRole }) {
   const tasksStatus = useSelector(selectTasksStatus);
   const currentProjectId = useSelector(selectCurrentProjectId);
   const currentUser = useSelector(selectUser);
+  const [yourTaskOnly, setYourTaskOnly] = useState(false);
   useEffect(() => {
     if (currentProjectId !== projectId) {
       dispatch(fetchTasks(projectId));
@@ -26,10 +27,17 @@ function TasksBar({ projectId, projectRole }) {
   } else if (tasksStatus === "failed") {
     content = <div>Something went wrong</div>;
   } else if (tasksStatus === "succeeded") {
-    if (tasks.length === 0) {
+    let filteredTasks = tasks.slice();
+    if (yourTaskOnly) {
+      filteredTasks = tasks
+        .slice()
+        .filter((task) => task.user.id === currentUser.id);
+    }
+
+    if (filteredTasks.length === 0) {
       content = <div>No Tasks to display</div>;
     } else {
-      content = tasks.map((task) => (
+      content = filteredTasks.map((task) => (
         <Task
           key={task.id}
           {...task}
@@ -41,7 +49,20 @@ function TasksBar({ projectId, projectRole }) {
   }
   return (
     <div className="flex flex-col gap-3">
-      <section>Filter</section>
+      <section className="flex gap-3">
+        <label htmlFor="toggle" className="cursor-pointer">
+          Show your tasks only
+        </label>
+        <input
+          id="toggle"
+          name="toggle"
+          toggle
+          type="checkbox"
+          className="toggle"
+          checked={yourTaskOnly}
+          onChange={() => setYourTaskOnly(!yourTaskOnly)}
+        />
+      </section>
       <h1>Tasks</h1>
       <section className="flex flex-col gap-5">{content}</section>
     </div>
