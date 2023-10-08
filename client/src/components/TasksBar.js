@@ -56,7 +56,6 @@ function TasksBar({ projectId, projectRole }) {
         <input
           id="toggle"
           name="toggle"
-          toggle
           type="checkbox"
           className="toggle"
           checked={yourTaskOnly}
