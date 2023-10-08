@@ -4,8 +4,6 @@ A platform to manage and collaborate on projects.
 
 Strive allows you to keep records of all your workouts routines.
 
-## Live Demo:
-
 ## Installation and running
 
 Fork and clone the repository to your local machine.
