@@ -76,7 +76,7 @@ function AddTaskBar({ members, projectId }) {
                 </option>
               ))}
             </select>
-            {formik.errors.user_id ? (
+            {formik.touched.user_id && formik.errors.user_id ? (
               <div className="text-red-400">{formik.errors.user_id}</div>
             ) : null}
           </div>
@@ -93,6 +93,9 @@ function AddTaskBar({ members, projectId }) {
               onBlur={formik.handleBlur}
               value={formik.values.deadline}
             />
+            {formik.touched.deadline && formik.errors.deadline ? (
+              <div className="text-red-400">{formik.errors.user_id}</div>
+            ) : null}
           </div>
 
           <Alert show={false} type="error" message="alert alert" />
