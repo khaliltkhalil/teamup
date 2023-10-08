@@ -30,7 +30,7 @@ function SignIn() {
       {user.id && <Navigate to="/" replace={true} />}
       <main className="flex p-10 ">
         <section className="flex flex-col space-y-10 items-center md:w-1/2 w-full">
-          <h1>logo</h1>
+          <h1 className="text-2xl">Teamup</h1>
           <section>
             <article>
               <p className="text-2xl font-bold">Welcome back</p>
