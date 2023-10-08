@@ -22,7 +22,7 @@ def create_users():
         user = User(
             first_name=first_name,
             last_name=last_name,
-            email=f"{first_name}@gmail.com",
+            email=f"{first_name.lower()}@gmail.com",
             password_hash=f"{first_name}123456",
         )
         users.append(user)

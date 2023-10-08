@@ -82,7 +82,7 @@ class Signup(Resource):
         user = User(
             first_name=json.get("first_name"),
             last_name=json.get("last_name"),
-            email=json.get("email"),
+            email=json.get("email").lower(),
             password_hash=json.get("password"),
         )
         db.session.add(user)
@@ -94,7 +94,7 @@ class Signup(Resource):
 class Signin(Resource):
     def post(self):
         json = request.get_json()
-        email = json.get("email")
+        email = json.get("email").lower()
         password = json.get("password")
         if not email or not password:
             abort(400, "email and password must provided")
