@@ -4,10 +4,11 @@ import * as Yup from "yup";
 import Alert from "../components/Alert";
 import { useDispatch } from "react-redux";
 import { addProject } from "../features/projectsSlice";
+import { useNavigate } from "react-router-dom";
 
 function AddProject() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -20,8 +21,8 @@ function AddProject() {
       deadline: Yup.string().required("Required"),
     }),
     onSubmit: (projectData) => {
-      console.log(projectData);
       dispatch(addProject(projectData));
+      navigate("/projects");
     },
   });
   return (
