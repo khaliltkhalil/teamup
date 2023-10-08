@@ -20,7 +20,7 @@ function TasksBar({ projectId, projectRole }) {
     if (currentProjectId !== projectId) {
       dispatch(fetchTasks(projectId));
     }
-  }, []);
+  }, [currentProjectId, dispatch, projectId]);
   let content;
   if (tasksStatus === "loading") {
     content = <div>Loading...</div>;

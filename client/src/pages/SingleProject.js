@@ -18,18 +18,20 @@ function SingleProject() {
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const project = useSelector((state) => selectProjectById(state, projectId));
+
   const projectsStatus = useSelector(selectProjectsStatus);
+  console.log(projectsStatus);
   const currentProjectId = useSelector(selectCurrentProjectId);
   const members = useSelector(selectMembers);
 
   useEffect(() => {
-    if (projectsStatus == "idle") {
+    if (projectsStatus === "idle") {
       dispatch(fetchProjects());
     }
-    if (currentProjectId != projectId) {
+    if (currentProjectId !== projectId) {
       dispatch(fetchMembers(projectId));
     }
-  }, []);
+  }, [currentProjectId, dispatch, projectId, projectsStatus]);
 
   if (projectsStatus === "loading") {
     return <div>Loading...</div>;

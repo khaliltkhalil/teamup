@@ -69,11 +69,11 @@ function Navbar() {
   );
 
   let navbarContent;
-  if (location.pathname == "/") {
+  if (location.pathname === "/") {
     navbarContent = homePageLinks;
   } else if (
-    location.pathname == "/projects" ||
-    location.pathname == "/projects/addProject"
+    location.pathname === "/projects" ||
+    location.pathname === "/projects/addProject"
   ) {
     navbarContent = projectsPageLinks;
   } else if (matchPath({ path: "/projects/:projectId" }, location.pathname)) {
@@ -112,7 +112,7 @@ function Navbar() {
               {/* Navbar menu content here */}
               {navbarContent}
               <li>
-                <a onClick={handleLogout}>Logout</a>
+                <p onClick={handleLogout}>Logout</p>
               </li>
             </ul>
           </div>
@@ -126,7 +126,7 @@ function Navbar() {
           {/* Sidebar content here */}
           {navbarContent}
           <li>
-            <a onClick={handleLogout}>Logout</a>
+            <p onClick={handleLogout}>Logout</p>
           </li>
         </ul>
       </div>

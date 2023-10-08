@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 
 const initialState = {
   currentProjectId: "",
@@ -106,7 +105,7 @@ const tasksSlice = createSlice({
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = state.data.filter(
-          (task) => task.id != action.payload.taskId
+          (task) => task.id !== action.payload.taskId
         );
       });
 

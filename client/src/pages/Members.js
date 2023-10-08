@@ -27,7 +27,7 @@ function Members() {
     if (currentProjectId !== projectId) {
       dispatch(fetchProjects());
     }
-  }, []);
+  }, [currentProjectId, dispatch, projectId]);
   let content;
   if (membersStatus === "loading") {
     content = <div>Loading...</div>;

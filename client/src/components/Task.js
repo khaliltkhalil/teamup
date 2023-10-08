@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import UserCard from "./UserCard";
 import { useDispatch } from "react-redux";
 import { deleteTask, editTask } from "../features/tasksSlice";
@@ -79,7 +79,7 @@ function Task({ id, title, user, status, currentUser, projectRole }) {
           </div>
         </form>
       </section>
-      {projectRole == "manager" && (
+      {projectRole === "manager" && (
         <section className="flex w-1/4 justify-end ">
           <AiFillDelete
             className="cursor-pointer "

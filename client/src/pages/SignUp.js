@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
 import signupImg from "../resources/signup-page-img.svg";
 import Alert from "../components/Alert";
-import { Link, Navigate, redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
