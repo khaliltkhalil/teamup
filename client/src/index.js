@@ -56,7 +56,7 @@ store.dispatch(checkUserSession());
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} data-theme="cupcake" />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );
