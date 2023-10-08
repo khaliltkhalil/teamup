@@ -36,7 +36,7 @@ function Projects() {
     );
   }
 
-  return <main className="h-screen">{content}</main>;
+  return <main>{content}</main>;
 }
 
 export default Projects;

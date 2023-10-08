@@ -21,7 +21,7 @@ function App() {
   }
 
   return (
-    <div data-theme="cupcake">
+    <div data-theme="cupcake" className="bg-white">
       <Navbar />
     </div>
   );

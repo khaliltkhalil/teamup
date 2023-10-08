@@ -29,9 +29,9 @@ function TasksBar({ projectId, projectRole }) {
   } else if (tasksStatus === "succeeded") {
     let filteredTasks = tasks.slice();
     if (yourTaskOnly) {
-      filteredTasks = tasks
-        .slice()
-        .filter((task) => task.user.id === currentUser.id);
+      filteredTasks = filteredTasks.filter(
+        (task) => task.user.id === currentUser.id
+      );
     }
 
     if (filteredTasks.length === 0) {
