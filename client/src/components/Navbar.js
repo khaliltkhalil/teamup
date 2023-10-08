@@ -9,6 +9,9 @@ import {
   useParams,
 } from "react-router-dom";
 import { logoutUser } from "../features/userSlice";
+import { clearProjectState } from "../features/projectsSlice";
+import { clearTasksState } from "../features/tasksSlice";
+import { clearMembersState } from "../features/membersSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -16,6 +19,9 @@ function Navbar() {
   const { projectId } = useParams();
   const handleLogout = () => {
     dispatch(logoutUser());
+    dispatch(clearProjectState());
+    dispatch(clearTasksState());
+    dispatch(clearMembersState());
   };
 
   const homePageLinks = (

@@ -59,6 +59,12 @@ const tasksSlice = createSlice({
     setCurrentProjectId(state, action) {
       state.currentProjectId = action.payload;
     },
+    clearTasksState(state, action) {
+      state.status = "idle";
+      state.date = [];
+      state.error = null;
+      state.currentProjectId = "";
+    },
   },
   extraReducers(builder) {
     builder
@@ -116,4 +122,5 @@ export const selectTasks = (state) => state.tasks.data;
 // export const selectProjectById = (state, projectId) =>
 //   state.projects.data.find((project) => project.id == projectId);
 export const selectCurrentProjectId = (state) => state.tasks.currentProjectId;
+export const { clearTasksState } = tasksSlice.actions;
 export default tasksSlice.reducer;

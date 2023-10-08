@@ -26,7 +26,13 @@ export const addProject = createAsyncThunk(
 const projectsSlice = createSlice({
   name: "projects",
   initialState,
-  reducers: {},
+  reducers: {
+    clearProjectState(state, action) {
+      state.status = "idle";
+      state.date = [];
+      state.error = null;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchProjects.pending, (state) => {
@@ -58,5 +64,5 @@ export const selectProjectsStatus = (state) => state.projects.status;
 export const selectProjects = (state) => state.projects.data;
 export const selectProjectById = (state, projectId) =>
   state.projects.data.find((project) => project.id == projectId);
-
+export const { clearProjectState } = projectsSlice.actions;
 export default projectsSlice.reducer;
