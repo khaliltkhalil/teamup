@@ -16,6 +16,7 @@ function AddTaskBar({ members, projectId }) {
     validationSchema: Yup.object({
       title: Yup.string().required("Required"),
       deadline: Yup.string().required("Required"),
+      user_id: Yup.string().required("Required"),
     }),
     onSubmit: (taskData) => {
       console.log(taskData);
@@ -59,17 +60,25 @@ function AddTaskBar({ members, projectId }) {
               <span className="label-text">Member:</span>
             </label>
             <select
+              id="user_id"
               name="user_id"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className="select select-bordered"
+              defaultValue="default"
             >
+              <option value="default" disabled>
+                Choose a member for this task
+              </option>
               {members.map((member) => (
                 <option key={member.id} value={member.id}>
                   {member.first_name} {member.last_name}
                 </option>
               ))}
             </select>
+            {formik.errors.user_id ? (
+              <div className="text-red-400">{formik.errors.user_id}</div>
+            ) : null}
           </div>
           <div className="form-control w-full max-w-xs">
             <label className="label">

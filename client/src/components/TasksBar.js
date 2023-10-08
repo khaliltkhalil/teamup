@@ -26,14 +26,18 @@ function TasksBar({ projectId, projectRole }) {
   } else if (tasksStatus === "failed") {
     content = <div>Something went wrong</div>;
   } else if (tasksStatus === "succeeded") {
-    content = tasks.map((task) => (
-      <Task
-        key={task.id}
-        {...task}
-        currentUser={currentUser}
-        projectRole={projectRole}
-      />
-    ));
+    if (tasks.length === 0) {
+      content = <div>No Tasks to display</div>;
+    } else {
+      content = tasks.map((task) => (
+        <Task
+          key={task.id}
+          {...task}
+          currentUser={currentUser}
+          projectRole={projectRole}
+        />
+      ));
+    }
   }
   return (
     <div className="flex flex-col gap-3">
