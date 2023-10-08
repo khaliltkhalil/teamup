@@ -28,11 +28,15 @@ from datetime import datetime
 #     return "<h1>teamup api<h1/>"
 
 
-# @app.route("/")
-# @app.route("/signin")
-# @app.route("/signup")
-# def index():
-#     return render_template("index.html")
+@app.route("/")
+@app.route("/signin")
+@app.route("/signup")
+@app.route("/projects")
+@app.route("/projects/<int:id>")
+@app.route("/projects/<int:id>/members")
+@app.route("/projects/addProject")
+def index(id=0):
+    return render_template("index.html")
 
 
 protected_endpoints = [

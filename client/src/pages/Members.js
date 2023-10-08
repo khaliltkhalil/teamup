@@ -21,10 +21,10 @@ function Members() {
   const project = useSelector((state) => selectProjectById(state, projectId));
 
   useEffect(() => {
-    if (currentProjectId != projectId) {
+    if (currentProjectId !== projectId) {
       dispatch(fetchMembers(projectId));
     }
-    if (currentProjectId != projectId) {
+    if (currentProjectId !== projectId) {
       dispatch(fetchProjects());
     }
   }, []);
