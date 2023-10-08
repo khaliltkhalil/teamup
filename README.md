@@ -32,7 +32,7 @@ cd server
 Run the database migration :
 
 ```bash
-alembic upgrade head
+flask db upgrade
 ```
 
 If you want you can seed the database :
@@ -51,19 +51,31 @@ App will be running on http://localhost:8000
 
 ## Usage
 
-On the home page you will find a summury of all your workouts by year.
+First login or create an account.
 
-On the workouts page you can view all of your workouts.
+Too see all your projects go to projects.
 
-To add a workout for today's date, click the add button in the nav bar.
+To View a project you can click view on the project card.
 
-To add an exercise, type the exercise name and click add exercise.
+You can create a new project from Add Project.
 
-To edit an exercise, click the edit button on the exercise card then add, update or delete sets.
+Once you are in a certain project you can view all tasks in this project.
 
-On the profile page you can view and update your info.
+To add members to this project click Project Members
 
-![](https://github.com/khaliltkhalil/strive/blob/main/Strive-demo.gif)
+You can search users and add them to your project
+
+You can create a task in the project and assign it to a member.
+
+If you created a project you will be the manager.
+
+If someone add you to a project you will be a member in this project
+
+If you are a manager you can add and delete tasks.
+
+You can only edit a task status if you are the owner of the task.
+
+![](https://github.com/khaliltkhalil/teamup/blob/main/teamup-demo.gif)
 
 ## Contributing
 
