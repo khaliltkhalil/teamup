@@ -10,7 +10,12 @@ from flask_cors import CORS
 
 
 load_dotenv()
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path="",
+    static_folder="../client/build",
+    template_folder="../client/build",
+)
 CORS(app)
 app.secret_key = os.environ.get("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")

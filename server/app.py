@@ -3,7 +3,7 @@
 from config import app, db, api
 from models import User, Project, ProjectUserRole, Task
 from flask_restful import Resource
-from flask import request, session, make_response
+from flask import request, session, make_response, render_template
 from models_serialization import (
     user_schema,
     users_schema,
@@ -23,18 +23,31 @@ from helper import combine_project_role, combine_user_role
 from datetime import datetime
 
 
-@app.route("/api/v1")
-def index():
-    return "<h1>teamup api<h1/>"
+# @app.route("/api/v1")
+# def index():
+#     return "<h1>teamup api<h1/>"
+
+
+@app.route("/")
+@app.route("/<int:id>")
+def index(id=0):
+    return render_template("index.html")
+
+
+protected_endpoints = [
+    "logout",
+    "check_session",
+    "projects_by_user",
+    "users",
+    "projects_users_roles",
+    "get_tasks",
+    "task_by_id",
+]
 
 
 @app.before_request
 def check_session():
-    if (
-        not session.get("user_id")
-        and request.endpoint != "signin"
-        and request.endpoint != "signup"
-    ):
+    if not session.get("user_id") and request.endpoint in protected_endpoints:
         return make_response({"message": "Unauthorized"}, 401)
 
 
