@@ -19,6 +19,14 @@ Build the production version :
 npm run build --prefix client
 ```
 
+Create .env file
+
+Add the following variables to .env file
+
+DATABASE_URI=sqlite:///app.db
+
+SECRET_KEY=random_secrete_key
+
 Move to the server directory :
 
 ```bash
