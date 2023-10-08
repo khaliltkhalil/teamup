@@ -40,6 +40,18 @@ export const editTask = createAsyncThunk(
   }
 );
 
+export const deleteTask = createAsyncThunk(
+  "projects/deleteTask",
+  async (taskId) => {
+    const response = await axios.delete(`/api/v1/tasks/${taskId}`);
+    const data = await response.data;
+    return {
+      data,
+      taskId,
+    };
+  }
+);
+
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
@@ -84,7 +96,14 @@ const tasksSlice = createSlice({
           }
           return task;
         });
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = state.data.filter(
+          (task) => task.id != action.payload.taskId
+        );
       });
+
     //   .addCase(editTask.rejected, (state, action) => {
     //     state.status = "failed";
     //     state.error = action.error.message;

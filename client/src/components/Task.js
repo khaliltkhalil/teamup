@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserCard from "./UserCard";
 import { useDispatch } from "react-redux";
-import { editTask } from "../features/tasksSlice";
+import { deleteTask, editTask } from "../features/tasksSlice";
 import { AiFillDelete } from "react-icons/ai";
 
 function Task({ id, title, user, status, currentUser, projectRole }) {
@@ -17,8 +17,8 @@ function Task({ id, title, user, status, currentUser, projectRole }) {
     setSelectedStatus(e.target.value);
   };
 
-  const handleDelete = (e) => {
-    console.log(id);
+  const handleDelete = () => {
+    dispatch(deleteTask(id));
   };
   return (
     <div className="card w-3/4 flex flex-row gap-4 bg-base-200 shadow-xl p-5">

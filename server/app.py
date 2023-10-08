@@ -305,6 +305,30 @@ class TaskById(Resource):
 
         return make_response(task_schema.dump(task), 200)
 
+    def delete(self, id):
+        user_id = session["user_id"]
+
+        task = Task.query.filter(Task.id == id).first()
+
+        if not task:
+            abort(400, "task doesn't exist")
+
+        project_id = task.project_id
+
+        # check role for this user_id
+        project_user_role = ProjectUserRole.query.filter(
+            ProjectUserRole.user_id == user_id,
+            ProjectUserRole.project_id == project_id,
+        ).first()
+
+        if not project_user_role or project_user_role.role != "manager":
+            abort(403, "Can't delete task from this project")
+
+        db.session.delete(task)
+        db.session.commit()
+
+        return make_response({"message": "task has been deleted"}, 200)
+
 
 api.add_resource(ProjectsByUser, "/api/v1/projects", endpoint="projects_by_user")
 api.add_resource(Users, "/api/v1/users", endpoint="users")
@@ -313,6 +337,7 @@ api.add_resource(
 )
 api.add_resource(Tasks, "/api/v1/tasks", endpoint="get_tasks")
 api.add_resource(TaskById, "/api/v1/tasks/<int:id>", endpoint="task_by_id")
+
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
