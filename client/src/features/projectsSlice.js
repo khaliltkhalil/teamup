@@ -51,7 +51,10 @@ const projectsSlice = createSlice({
       })
       .addCase(addProject.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data.push(action.payload);
+        state.data.push({
+          ...action.payload,
+          role: "manager",
+        });
       })
       .addCase(addProject.rejected, (state, action) => {
         state.status = "failed";
