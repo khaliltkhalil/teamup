@@ -2,6 +2,10 @@
 
 A platform to manage and collaborate on projects.
 
+## Live Demo
+
+https://teamup-ptao.onrender.com
+
 ## Installation and running
 
 Fork and clone the repository to your local machine.
