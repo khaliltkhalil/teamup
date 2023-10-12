@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import signupImg from "../resources/signup-page-img.svg";
@@ -9,6 +9,8 @@ import { loginUser, selectUser } from "../features/userSlice";
 
 function SignIn() {
   const dispatch = useDispatch();
+  const [createUserStatus, setCreateUserStatus] = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const user = useSelector(selectUser);
   const formik = useFormik({
     initialValues: {
@@ -21,8 +23,18 @@ function SignIn() {
         .min(6, "Must be longer than 6 characters")
         .required("Required"),
     }),
-    onSubmit: (user) => {
-      dispatch(loginUser(user));
+    onSubmit: async (user) => {
+      try {
+        setCreateUserStatus("loading");
+        await dispatch(loginUser(user)).unwrap();
+      } catch (err) {
+        setErrorMessage(err.message);
+        setCreateUserStatus("failed");
+        setTimeout(() => {
+          setCreateUserStatus("idle");
+          setErrorMessage("");
+        }, 3000);
+      }
     },
   });
   return (
@@ -74,9 +86,22 @@ function SignIn() {
                     <div className="text-red-400">{formik.errors.password}</div>
                   ) : null}
                 </div>
-                <Alert show={false} type="error" message="alert alert" />
+                <Alert
+                  show={createUserStatus === "failed"}
+                  type="error"
+                  message={errorMessage}
+                />
               </section>
-              <button className="btn btn-primary btn-block">Sign In</button>
+              <button
+                className="btn btn-primary btn-block"
+                disabled={createUserStatus === "loading"}
+              >
+                {createUserStatus === "loading" ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Sign In"
+                )}
+              </button>
             </form>
             <p className="text-center mt-2">
               Don't have an account?{" "}

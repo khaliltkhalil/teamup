@@ -5,12 +5,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, selectUser } from "../features/userSlice";
+import { useState } from "react";
 
 function SignUp() {
   const dispatch = useDispatch();
-
+  const [createUserStatus, setCreateUserStatus] = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const user = useSelector(selectUser);
-
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -30,8 +31,18 @@ function SignUp() {
         .min(6, "Must be longer than 6 characters")
         .required("Required"),
     }),
-    onSubmit: (user) => {
-      dispatch(createUser(user));
+    onSubmit: async (user) => {
+      try {
+        setCreateUserStatus("loading");
+        await dispatch(createUser(user)).unwrap();
+      } catch (err) {
+        setErrorMessage(err.message);
+        setCreateUserStatus("failed");
+        setTimeout(() => {
+          setCreateUserStatus("idle");
+          setErrorMessage("");
+        }, 3000);
+      }
     },
   });
 
@@ -124,9 +135,22 @@ function SignUp() {
                     <div className="text-red-400">{formik.errors.password}</div>
                   ) : null}
                 </div>
-                <Alert show={false} type="error" message="alert alert" />
+                <Alert
+                  show={createUserStatus === "failed"}
+                  type="error"
+                  message={errorMessage}
+                />
               </section>
-              <button className="btn btn-primary btn-block">Sign Up</button>
+              <button
+                className="btn btn-primary btn-block"
+                disabled={createUserStatus === "loading"}
+              >
+                {createUserStatus === "loading" ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Sign Up"
+                )}
+              </button>
             </form>
             <p className="text-center mt-2">
               Already have an account?{" "}

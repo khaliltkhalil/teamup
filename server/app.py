@@ -11,7 +11,13 @@ from models_serialization import (
     tasks_schema,
     task_schema,
 )
-from werkzeug.exceptions import NotFound, BadRequest, Forbidden, abort
+from werkzeug.exceptions import (
+    NotFound,
+    BadRequest,
+    Forbidden,
+    InternalServerError,
+    abort,
+)
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
 from models_serialization import (
@@ -87,6 +93,11 @@ def handle_value_error(e):
     return response
 
 
+@app.errorhandler(InternalServerError)
+def handle_internal_server_error(e):
+    return make_response({"message": "Something Went Wrong"})
+
+
 @app.errorhandler(TypeError)
 def handle_value_error(e):
     response = make_response({"message": str(e)}, 400)
@@ -97,6 +108,11 @@ def handle_value_error(e):
 class Signup(Resource):
     def post(self):
         json = request.get_json()
+        existed_user = User.query.filter(
+            User.email == json.get("email").lower()
+        ).first()
+        if existed_user:
+            abort(400, "email address already exists")
         user = User(
             first_name=json.get("first_name"),
             last_name=json.get("last_name"),

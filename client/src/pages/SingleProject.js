@@ -20,7 +20,7 @@ function SingleProject() {
   const project = useSelector((state) => selectProjectById(state, projectId));
 
   const projectsStatus = useSelector(selectProjectsStatus);
-  console.log(projectsStatus);
+
   const currentProjectId = useSelector(selectCurrentProjectId);
   const members = useSelector(selectMembers);
 

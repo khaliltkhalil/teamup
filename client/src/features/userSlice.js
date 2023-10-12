@@ -7,22 +7,43 @@ const initialState = {
   error: null,
 };
 
-export const createUser = createAsyncThunk("user/fetchUser", async (user) => {
-  const response = await axios.post("/api/v1/signup", user);
-  return response.data;
-});
+export const createUser = createAsyncThunk(
+  "user/fetchUser",
+  async (user, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/v1/signup", user);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
-export const loginUser = createAsyncThunk("user/fetchUser", async (user) => {
-  const response = await axios.post("/api/v1/signin", user, {
-    withCredentials: true,
-  });
-  return response.data;
-});
+export const loginUser = createAsyncThunk(
+  "user/fetchUser",
+  async (user, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/v1/signin", user, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
-export const checkUserSession = createAsyncThunk("user/fetchUser", async () => {
-  const response = await axios.get("/api/v1/check_session");
-  return response.data;
-});
+export const checkUserSession = createAsyncThunk(
+  "user/fetchUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/v1/check_session");
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
   const response = await axios.delete("/api/v1/logout");
@@ -44,7 +65,7 @@ const userSlice = createSlice({
       })
       .addCase(createUser.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(logoutUser.pending, (state) => {
         state.status = "loading";
@@ -57,6 +78,7 @@ const userSlice = createSlice({
   },
 });
 
+export const { resetUserStatus } = userSlice.actions;
 export const selectUser = (state) => state.user.user;
 export const selectUserStatus = (state) => state.user.status;
 export default userSlice.reducer;
