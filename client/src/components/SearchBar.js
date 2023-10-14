@@ -68,7 +68,7 @@ function SearchBar({ projectId }) {
   return (
     <div className="flex gap-3">
       <Turnstone
-        cancelButton={true}
+        cancelButton={false}
         clearButton={true}
         debounceWait={250}
         id="search"

@@ -63,7 +63,9 @@ function TasksBar({ projectId, projectRole }) {
         />
       </section>
       <h1>Tasks</h1>
-      <section className="flex flex-col gap-5">{content}</section>
+      <section className="flex flex-col flex-wrap items-center md:flex-row gap-5">
+        {content}
+      </section>
     </div>
   );
 }

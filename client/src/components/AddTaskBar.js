@@ -31,13 +31,13 @@ function AddTaskBar({ members, projectId }) {
     },
   });
   return (
-    <div>
+    <div className="">
       <form
-        className="flex w-full space-y-8 mt-8 "
+        className="flex flex-col items-center 2xl:flex-row 2xl:items-start w-full space-y-8 mt-8 "
         onSubmit={formik.handleSubmit}
       >
-        <section className="flex gap-5 w-full">
-          <div className="form-control w-full max-w-xs">
+        <section className="flex flex-col md:flex-row items-center md:items-start gap-5 w-full">
+          <div className="form-control justify-start w-full max-w-xs">
             <label className="label">
               <span className="label-text font-bold">Title:</span>
             </label>
@@ -57,7 +57,7 @@ function AddTaskBar({ members, projectId }) {
           </div>
           <div className="form-control w-full max-w-xs">
             <label className="label">
-              <span className="label-text">Member:</span>
+              <span className="label-text font-bold">Member:</span>
             </label>
             <select
               id="user_id"
@@ -82,7 +82,7 @@ function AddTaskBar({ members, projectId }) {
           </div>
           <div className="form-control w-full max-w-xs">
             <label className="label">
-              <span className="label-text font-bold">deadline:</span>
+              <span className="label-text font-bold">Deadline:</span>
             </label>
             <input
               id="deadline"

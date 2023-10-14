@@ -37,17 +37,19 @@ function Members() {
     content = members.map((member) => <UserCard key={member.id} {...member} />);
   }
   return (
-    <main className="h-screen m-5 flex">
-      <section className="flex flex-col gap-3 w-1/2">
-        <h1>Members:</h1>
-        {content}
-      </section>
+    <main className="h-screen m-5 flex flex-col gap-5">
       {project && project.role === "manager" && (
-        <section>
+        <section className="ml-auto mr-auto">
           <h1>Add Members to Project</h1>
           <SearchBar projectId={projectId} />
         </section>
       )}
+      <section className="flex flex-col gap-3">
+        <h1>Members:</h1>
+        <section className="flex flex-col items-center md:flex-row flex-wrap gap-5">
+          {content}
+        </section>
+      </section>
     </main>
   );
 }

@@ -27,7 +27,7 @@ function Navbar() {
   const homePageLinks = (
     <>
       <li>
-        <Link to="/projects">Your Projects</Link>
+        <Link to="/projects">Projects</Link>
       </li>
     </>
   );
@@ -49,7 +49,7 @@ function Navbar() {
         <NavLink to="/">Home</NavLink>
       </li>
       <li>
-        <Link to="/projects">Your Project</Link>
+        <Link to="/projects">Projects</Link>
       </li>
       <li>
         <Link to={`/projects/${projectId}/members`}>Project Members</Link>
@@ -69,7 +69,10 @@ function Navbar() {
   );
 
   let navbarContent;
-  if (location.pathname === "/") {
+  if (
+    location.pathname === "/" ||
+    location.pathname === "/projects/addProject"
+  ) {
     navbarContent = homePageLinks;
   } else if (
     location.pathname === "/projects" ||
@@ -79,7 +82,8 @@ function Navbar() {
   } else if (matchPath({ path: "/projects/:projectId" }, location.pathname)) {
     navbarContent = singleProjectLinks;
   } else if (
-    matchPath({ path: "/projects/:projectId/members" }, location.pathname)
+    matchPath({ path: "/projects/:projectId/members" }, location.pathname) ||
+    matchPath({ path: "/projects/addProject" }, location.pathname)
   ) {
     navbarContent = membersPageLinks;
   }

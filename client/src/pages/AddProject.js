@@ -59,7 +59,7 @@ function AddProject() {
               name="description"
               type="text"
               placeholder="Type here"
-              className="input input-bordered w-full max-w-xs h-36"
+              className="input input-bordered w-full max-w-xs h-36 p-3"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.description}

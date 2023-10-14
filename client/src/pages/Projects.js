@@ -27,7 +27,7 @@ function Projects() {
     content = <h1>Something went wrong ... :(</h1>;
   } else if (projectsStatus === "succeeded") {
     content = (
-      <div className="flex flex-wrap gap-5 p-5">
+      <div className="flex flex-wrap justify-center md:justify-start gap-5 p-5">
         {projects.map((project) => (
           <ProjectCard key={project.id} {...project} />
         ))}

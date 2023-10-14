@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <div data-theme="cupcake" className="bg-white">
+    <div data-theme="cmyk" className="bg-white">
       <Navbar />
     </div>
   );

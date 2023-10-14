@@ -20,7 +20,6 @@ function SingleProject() {
   const project = useSelector((state) => selectProjectById(state, projectId));
 
   const projectsStatus = useSelector(selectProjectsStatus);
-
   const currentProjectId = useSelector(selectCurrentProjectId);
   const members = useSelector(selectMembers);
 
@@ -46,21 +45,15 @@ function SingleProject() {
       <main className="flex flex-col gap-12 m-5">
         <section
           id="project-info"
-          className="flex flex-col w-1/2 gap-5 ml-auto mr-auto"
+          className="flex flex-col md:w-1/4 w-full gap-5 ml-auto mr-auto"
         >
-          <p className="card-title">{project.title}</p>
+          <p className="card-title justify-center">{project.title}</p>
           <p>{project.description}</p>
           <p>Deadline: {new Date(project.deadline).toDateString()}</p>
-          <p>Status: {project.status}</p>
-          {/* {project.role == "manager" && (
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Edit Project</button>
-            </div>
-          )} */}
         </section>
         {project.role === "manager" && (
           <section>
-            <h2>Add Task</h2>
+            <h2>Add a Task</h2>
             <AddTaskBar members={members} projectId={projectId} />
           </section>
         )}
